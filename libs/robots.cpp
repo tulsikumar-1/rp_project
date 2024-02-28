@@ -6,6 +6,7 @@ std::vector<Robot> extractRobots(const YAML::Node& config) {
     for (const auto& robotNode : config["robots"]) {
         Robot robot;
         robot.name = robotNode["name"].as<std::string>();
+        std::cout<<robot.name<<std::endl;
         robot.frame_id = robotNode["frame_id"].as<std::string>();
         robot.pose.x = robotNode["initial_pose"]["x"].as<double>();
         robot.pose.y = robotNode["initial_pose"]["y"].as<double>();

@@ -14,8 +14,6 @@ struct Pose {
 
 struct Dimensions {
     double radius;
-    double length;
-    double width;
 };
 
 struct Color {
