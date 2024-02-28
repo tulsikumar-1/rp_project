@@ -1,5 +1,6 @@
 #include "robots.h"
 #include "map.h"
+#include "lidar.h"
 #include <iostream>
 #include <opencv2/opencv.hpp>
 #include "visualize.h"
@@ -20,7 +21,7 @@ std::vector<Robot> robots = extractRobots(config);
 cv::Mat mapImage;
 cv::Mat mapImage1;
 cv::Mat gray_image;
-
+int intensity_threshold = 230;
 
 bool is_mouse_dragging = false;
 std::vector<bool> is_robot_dragging(robots.size(), false);
@@ -74,11 +75,13 @@ int main(int argc, char **argv) {
 	ros::NodeHandle nh;
 	ros::Rate r(10);
 	std::vector<ros::Publisher> pose_publishers;
+	std::vector<ros::Publisher> lidar_publishers;
 	tf::TransformBroadcaster tf_broadcaster;
 	
 	for (size_t r=0; r<robots.size();++r) {
         //pose_publishers.push_back(nh.advertise<geometry_msgs::PoseWithCovarianceStamped>( "/"+robots[r].name+"_pose", 10));
-        pose_publishers.push_back(nh.advertise<geometry_msgs::PoseWithCovarianceStamped>( "/pose", 10));
+        pose_publishers.push_back(nh.advertise<geometry_msgs::PoseWithCovarianceStamped>( "/pose", 10)); // to be changed
+        lidar_publishers.push_back(nh.advertise<sensor_msgs::LaserScan>("/scan", 10)); //to be changed
 
         }
 	
@@ -89,6 +92,7 @@ int main(int argc, char **argv) {
 		cv::cvtColor(mapImage1, gray_image, cv::COLOR_BGR2GRAY);
 
 		mapImage1 = add_robots(mapImage1, map, robots);
+		mapImage1=Lidar(mapImage1, gray_image, map, robots, intensity_threshold,lidar_publishers);
 		cv::imshow("multi_xy_robot_simulator", mapImage1);
 		cv::waitKey(10);
 		
@@ -108,17 +112,30 @@ int main(int argc, char **argv) {
 		// Publishing tf 
 		
 		geometry_msgs::TransformStamped pose_data;
-		pose_data.header.frame_id = "map";  // Set your desired frame id
+		pose_data.header.frame_id = robots[p].frame_id;  // Set your desired frame id
 		pose_data.transform.translation.x = robots[p].pose.x;
 		pose_data.transform.translation.y = robots[p].pose.y;
 		pose_data.transform.translation.z = 0.0;
-		pose_data.transform.rotation = tf::createQuaternionMsgFromYaw(robots[p].pose.theta);
+		pose_data.transform.rotation = tf::createQuaternionMsgFromYaw(0.0);
 		pose_data.header.stamp = ros::Time::now();
 		pose_data.child_frame_id = "base_link";  // to be changed later for multiple robots
+		tf_broadcaster.sendTransform(pose_data);
+		
+		
+		geometry_msgs::TransformStamped sensor_tf;
+		sensor_tf.header.frame_id = "base_link";  // Set your desired frame id
+		sensor_tf.transform.translation.x = 0;
+		sensor_tf.transform.translation.y = 0;
+		sensor_tf.transform.translation.z = 0.0;
+		sensor_tf.transform.rotation = tf::createQuaternionMsgFromYaw(0.0);
+		sensor_tf.header.stamp = ros::Time::now();
+		sensor_tf.child_frame_id = "scan_frame";  // to be changed later for multiple robots
 		
 
 
-		tf_broadcaster.sendTransform(pose_data);
+		tf_broadcaster.sendTransform(sensor_tf);
+		
+		
 		
 		
 		

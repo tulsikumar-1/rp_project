@@ -28,6 +28,6 @@ find_package(OpenCV  REQUIRED)
 
 add_executable(main src/main.cpp)
 
-target_link_libraries(main PRIVATE robots map visualize  ${catkin_LIBRARIES} ${OpenCV_LIBS} )
+target_link_libraries(main PRIVATE robots map visualize lidar ${catkin_LIBRARIES} ${OpenCV_LIBS} )
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libs)
 target_include_directories(main PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/libs)

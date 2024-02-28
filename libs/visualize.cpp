@@ -23,7 +23,7 @@ Pose imageToWorld(const cv::Point2d& image_point, const MapConfig& mapConfig) {
 }
 
 
-cv::Mat drawArrow(cv::Mat& image, const cv::Point2i& start, double angle, const cv::Scalar& color, int size) { 
+cv::Mat drawArrow(cv::Mat& image, const cv::Point2i& start, double angle, const cv::Scalar& color, double size) { 
     cv::Point2i end(start.x + size * std::cos(angle), start.y + size * std::sin(angle));
     cv::arrowedLine(image, start, end, color, 2);
     return image;  
@@ -41,7 +41,7 @@ cv::Mat add_robots(cv::Mat& mapImage ,const MapConfig& mapConfig, const std::vec
 	int radius =robot.dimensions.radius/mapConfig.resolution;
 	cv::Point2d center =worldToImage(robot.pose, mapConfig);
 	
-	std::cout<<robot.pose.x<< " robot  "<< robot.pose.y<<std::endl;
+	//std::cout<<robot.pose.x<< " robot  "<< robot.pose.y<<std::endl;
 	cv::circle(mapImage, center, radius, color_r, cv::FILLED);
 	mapImage = drawArrow(mapImage, center, robot.pose.theta, color_a,radius);
 

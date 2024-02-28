@@ -16,7 +16,7 @@ cv::Point2d worldToImage(const Pose& pose, const MapConfig& mapConfig);
 
 Pose imageToWorld(const cv::Point2d& image_point, const MapConfig& mapConfig);
 
-cv::Mat drawArrow(cv::Mat& image, const cv::Point2i& start, double angle, const cv::Scalar& color,int size);
+cv::Mat drawArrow(cv::Mat& image, const cv::Point2i& start, double angle, const cv::Scalar& color,double size);
 
 cv::Mat add_robots(cv::Mat& mapImage ,const MapConfig& mapConfig, const std::vector<Robot>& robots);
 
