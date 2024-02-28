@@ -11,7 +11,7 @@ robots:
     initial_pose:
       x: 10.0
       y: 10.0
-      theta: 0
+      theta: 3.142
     dimensions:
       wheel_r: 0.5
     color:
@@ -25,24 +25,5 @@ robots:
       max_range: 15.0
     max_vel: 1
 
-
-  - name: "Bot2"
-    frame_id: "map"
-    initial_pose:
-      x: -10.0
-      y: 10.0
-      theta: 0
-    dimensions:
-      wheel_r: 0.8
-    color:
-      r: 1.0
-      g: 1.0
-      b: 0.0
-      a: 1.0
-    lidar:
-      num_beams: 200
-      min_range: 0.1
-      max_range: 15.0
-    max_vel: 1
 
 

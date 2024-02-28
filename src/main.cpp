@@ -74,9 +74,11 @@ int main(int argc, char **argv) {
 	ros::NodeHandle nh;
 	ros::Rate r(10);
 	std::vector<ros::Publisher> pose_publishers;
+	tf::TransformBroadcaster tf_broadcaster;
 	
 	for (size_t r=0; r<robots.size();++r) {
-        pose_publishers.push_back(nh.advertise<geometry_msgs::PoseWithCovarianceStamped>( "/"+robots[r].name+"_pose", 10));
+        //pose_publishers.push_back(nh.advertise<geometry_msgs::PoseWithCovarianceStamped>( "/"+robots[r].name+"_pose", 10));
+        pose_publishers.push_back(nh.advertise<geometry_msgs::PoseWithCovarianceStamped>( "/pose", 10));
 
         }
 	
@@ -91,14 +93,35 @@ int main(int argc, char **argv) {
 		cv::waitKey(10);
 		
 		for (size_t p=0; p<robots.size();++p) {
+		
+		// Publishing Pose in ROS
 		geometry_msgs::PoseWithCovarianceStamped pose_msg;
 		pose_msg.header.stamp = ros::Time::now();
 		pose_msg.header.frame_id = robots[p].frame_id;
 		pose_msg.pose.pose.position.x = robots[p].pose.x; 
 		pose_msg.pose.pose.position.y = robots[p].pose.y; 
 		pose_msg.pose.pose.orientation = tf::createQuaternionMsgFromYaw(robots[p].pose.theta); 
+		pose_msg.pose.covariance = {0};
+		pose_publishers[p].publish(pose_msg); 
 		
-		pose_publishers[p].publish(pose_msg);
+		
+		// Publishing tf 
+		
+		geometry_msgs::TransformStamped pose_data;
+		pose_data.header.frame_id = "map";  // Set your desired frame id
+		pose_data.transform.translation.x = robots[p].pose.x;
+		pose_data.transform.translation.y = robots[p].pose.y;
+		pose_data.transform.translation.z = 0.0;
+		pose_data.transform.rotation = tf::createQuaternionMsgFromYaw(robots[p].pose.theta);
+		pose_data.header.stamp = ros::Time::now();
+		pose_data.child_frame_id = "base_link";  // to be changed later for multiple robots
+		
+
+
+		tf_broadcaster.sendTransform(pose_data);
+		
+		
+		
 		
 		}
 		
