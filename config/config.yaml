@@ -1,21 +1,16 @@
 map:
-  path: "map.png"
+  path: "/home/tulsi/rp_project/src/xy_simulator/maps/map.png"
   width: 10.0
   height: 8.0
   resolution: 0.05
-  color:
-      r: 1.0
-      g: 1.0
-      b: 1.0
-      a: 1.0
    
 
 robots:
   - name: "Bot1"
     frame_id: "map"
     initial_pose:
-      x: 2.0
-      y: 3.5
+      x: -10.0
+      y: 10.0
       theta: 0
     dimensions:
       wheel_r: 0.5

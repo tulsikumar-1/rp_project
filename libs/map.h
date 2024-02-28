@@ -12,24 +12,13 @@
 
   
 struct MapConfig {
-    std::string type;
+    std::string path;
     double width;
     double height;
     double resolution;
-    Color color;
  
-    
 } ; 
 
-struct Obstacle {
-    std::string name;
-    std::string type;
-    Pose center;
-    Dimensions size;
-    
-};
-
 MapConfig extract_map(const YAML::Node& config);
-std::vector<Obstacle> extract_obs(const YAML::Node& config);
     
 #endif // map_H
