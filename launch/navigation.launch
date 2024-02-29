@@ -1,0 +1,21 @@
+<launch>
+  <!-- Arguments -->
+  <arg name="map_file" default="$(find xy_simulator)/maps/map.yaml"/>
+
+  <node name="main" pkg="xy_simulator" type="main" output="screen"/>
+  
+  <!-- Map server -->
+  <node pkg="map_server" name="map_server" type="map_server" args="$(arg map_file)"/>
+
+  <!-- AMCL -->
+  <include file="$(find xy_simulator)/launch/amcl.launch"/>
+
+  <!-- move_base -->
+  <include file="$(find xy_simulator)/launch/move_base.launch">
+  </include>
+  
+  <!-- rviz --> 
+    <node pkg="rviz" type="rviz" name="rviz" required="true"
+          args="-d $(find xy_simulator)/rviz/xy_simulator.rviz"/>
+  
+</launch>

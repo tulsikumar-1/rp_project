@@ -6,7 +6,9 @@ std::vector<Robot>& robots,const int intensity_threshold,std::vector<ros::Publis
 
 
 
-for (size_t r=0; r<robots.size();++r){
+//for (size_t r=0; r<robots.size();++r)
+for (size_t r=0; r<1;++r)
+{
         Robot robot = robots[r];
 	int num_beams = robot.lidar.num_beams;     // Number of LiDAR beams
 	double min_range =robot.lidar.min_range+robot.dimensions.radius;   // Minimum LiDAR range
