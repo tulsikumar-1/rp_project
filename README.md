@@ -1,4 +1,10 @@
 # Multi Robot Simulator
+The package is used to simulate the unicycle robots in 2D enviroment. Robots are shown in an interective enviroment where they can be moved easily.Every robot has a Lidar sensor.
+The output of the lidar also can be seen
+![Screenshot from 2024-03-26 20-15-32](https://github.com/tulsikumar-1/rp_project/assets/104934568/e622f9fc-1288-40b5-818e-b1a2b28784ab)
+
+
+## How to run
 Download to repo and paste it in your catkin workspace
 
 Source the setup file using
@@ -30,8 +36,23 @@ Maps can be located inside the maps folder in the package.
 
 Once config.yaml file is ready then following command can be used to run the package
 
+
+## Only simulator
+
 ```sh
-roslaunch xy_simulator navigation navigation.launch map_file:="map.yaml" robot_name:=Bot1
+rosrun xy_simulator main
 ```
+## Simulator with naivation stack
+
+```sh
+roslaunch xy_simulator navigation navigation.launch map_file:=map.yaml
+```
+
+map.yaml needs to be changed according to map being used for example in case of "cappero_map.yaml" following cmd is used
+
+```sh
+roslaunch xy_simulator navigation navigation.launch map_file:=cappero_map.yaml
+```
+
 
 
