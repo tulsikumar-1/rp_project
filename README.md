@@ -1,1 +1,2 @@
-# rp_project
+# Multi Robot Simulator
+
