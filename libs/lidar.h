@@ -10,6 +10,7 @@
 #include "visualize.h"
 #include <ros/ros.h>
 #include <sensor_msgs/LaserScan.h>
-cv::Mat Lidar(cv::Mat& mapImage ,cv::Mat& gray_image,const MapConfig& mapConfig,  std::vector<Robot>& robots,const int intensity_threshold,std::vector<ros::Publisher> lidar_publisher);
+cv::Mat Lidar(cv::Mat& mapImage ,cv::Mat& gray_image,const MapConfig& mapConfig,  
+std::vector<Robot>& robots,const int intensity_threshold,std::vector<ros::Publisher> lidar_publisher);
 
 #endif //LIDAR_H

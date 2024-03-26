@@ -1,17 +1,45 @@
 <launch>
+   
+   <arg name="robot_name" default="Bot1"/>
+     
+  <rosparam command="load" file="$(find xy_simulator)/config/config.yaml"/>
+  
+  
   <!-- Arguments -->
-  <arg name="map_file" default="$(find xy_simulator)/maps/map.yaml"/>
+  <arg name="map_file" default="map.yaml"/>
 
-  <node name="main" pkg="xy_simulator" type="main" output="screen"/>
+  <node name="main" pkg="xy_simulator" type="main" output="screen">
+	<param name="robot_name" value="$(arg robot_name)"/>
+  </node>
   
   <!-- Map server -->
-  <node pkg="map_server" name="map_server" type="map_server" args="$(arg map_file)"/>
+  <node pkg="map_server" name="map_server" type="map_server" args="$(find xy_simulator)/maps/$(arg map_file)"/>
+        
+  
 
   <!-- AMCL -->
-  <include file="$(find xy_simulator)/launch/amcl.launch"/>
+  <include file="$(find xy_simulator)/launch/amcl.launch"> 
+    <arg name="max_range" value="robots/${arg robot_name}/lidar/max_range"/>
+    <arg name="max_beams" value="robots/${arg robot_name}/lidar/num_beams"/>
+    
+    
+  </include>
 
+  
+  
+  
   <!-- move_base -->
   <include file="$(find xy_simulator)/launch/move_base.launch">
+
+
+     <arg name="robot_name" value="$(arg robot_name)" />
+     <arg name="resolution" value=" map/resolution" />
+     <arg name="robot_radius" value="robots/${arg robot_name}/dimensions/wheel_r" />
+     <arg name="robot_range" value="robots/${arg robot_name}/lidar/max_range" />
+     
+     
+     
+
   </include>
   
   <!-- rviz --> 

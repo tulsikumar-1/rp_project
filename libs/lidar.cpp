@@ -1,17 +1,17 @@
 #include "lidar.h"
 
 
+
 cv::Mat Lidar(cv::Mat& mapImage ,cv::Mat& gray_image,const MapConfig& mapConfig,  
-std::vector<Robot>& robots,const int intensity_threshold,std::vector<ros::Publisher> lidar_publisher){
+std::vector<Robot>& robots,const int intensity_threshold,std::vector<ros::Publisher> lidar_publishers)
+{
+std::vector<sensor_msgs::LaserScan> laserScans;
 
-
-
-//for (size_t r=0; r<robots.size();++r)
-for (size_t r=0; r<1;++r)
+for (size_t r=0; r<robots.size();++r)
 {
         Robot robot = robots[r];
 	int num_beams = robot.lidar.num_beams;     // Number of LiDAR beams
-	double min_range =robot.lidar.min_range+robot.dimensions.radius;   // Minimum LiDAR range
+	double min_range =robot.lidar.min_range+robot.dimensions.radius+1;   // Minimum LiDAR range
 	double max_range = robot.lidar.max_range;   // Maximum LiDAR range
 	cv::Scalar color(robot.color.b * 255, robot.color.g * 255, robot.color.r * 255,robot.color.a * 128);
 
@@ -21,7 +21,7 @@ for (size_t r=0; r<1;++r)
 	gray_image = add_robots(gray_image, mapConfig,robotsCopy);
 	sensor_msgs::LaserScan lidar_data;
 	lidar_data.header.stamp = ros::Time::now();
-	lidar_data.header.frame_id = "scan_frame";  // to be changed
+	lidar_data.header.frame_id = robot.name + "_scan_frame";  
 	
 	lidar_data.angle_min =  0;  
 	lidar_data.angle_max = 2*M_PI; 
@@ -39,14 +39,14 @@ for (int i = 0; i <num_beams; ++i) {
     
     
     
-    for (double range = min_range; range <= max_range; range += 0.1) {
+    for (double range = min_range; range <= max_range; range += 0.01) {
         // Convert polar coordinates to Cartesian coordinates
                 
         cv::Point2d map = worldToImage({robot.pose.x + range * cos(angle) ,robot.pose.y + range*sin(angle),0}, mapConfig);
         
        // std::cout<< i<<"  " <<map.x<<" ,  "<< map.y<<std::endl;
         // Check if the point is inside the 2D map bounds
-        if (map.x >= 0 && map.x < gray_image.rows && map.y >= 0 && map.y < gray_image.cols) {
+        if (map.x >= 0 && map.x < gray_image.cols && map.y >= 0 && map.y < gray_image.rows) {
             // 
             if (gray_image.at<uchar>(map.y, map.x) < intensity_threshold) {
 
@@ -57,6 +57,8 @@ for (int i = 0; i <num_beams; ++i) {
                 break; // Break after detecting boundary point
             }
             
+            
+            
            
             
         }
@@ -64,7 +66,8 @@ for (int i = 0; i <num_beams; ++i) {
 }       
         
        // std::cout<<"np prob in loop";
-        lidar_publisher[r].publish(lidar_data);
+        lidar_publishers[r].publish(lidar_data);
+        
         
 
 }

@@ -44,10 +44,10 @@ cv::Mat add_robots(cv::Mat& mapImage ,const MapConfig& mapConfig, const std::vec
 	//std::cout<<robot.pose.x<< " robot  "<< robot.pose.y<<std::endl;
 	cv::circle(mapImage, center, radius, color_r, cv::FILLED);
 	cv::circle(mapImage, center, radius, cv::Scalar(0,0,0,255),1);
-	mapImage = drawArrow(mapImage, center, robot.pose.theta, color_a,radius);
+	mapImage = drawArrow(mapImage, center, robot.pose.theta, color_a,radius-2);
 
-	cv::putText(mapImage, robot.name, worldToImage(robot.pose, mapConfig) + cv::Point2d(15, -15),
-	cv::FONT_HERSHEY_SIMPLEX, 0.5, color_r, 1);
+	//cv::putText(mapImage, robot.name, worldToImage(robot.pose, mapConfig) + cv::Point2d(15, -15),
+	//cv::FONT_HERSHEY_SIMPLEX, 0.5, color_r, 1);
 	}
 
 	return  mapImage;         
