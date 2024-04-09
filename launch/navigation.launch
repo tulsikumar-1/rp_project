@@ -1,6 +1,6 @@
 <launch>
    
-   <arg name="robot_name" default="Bot1"/>
+  <arg name="robot_name" default="Bot1"/>
      
   <rosparam command="load" file="$(find xy_simulator)/config/config.yaml"/>
   
@@ -33,7 +33,7 @@
 
 
      <arg name="robot_name" value="$(arg robot_name)" />
-     <arg name="resolution" value=" map/resolution" />
+     <arg name="resolution" value="map/resolution" />
      <arg name="robot_radius" value="robots/${arg robot_name}/dimensions/wheel_r" />
      <arg name="robot_range" value="robots/${arg robot_name}/lidar/max_range" />
      
